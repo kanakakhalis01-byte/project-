@@ -2,7 +2,7 @@
 // config/database.php
 
 // variable nyimpen detail server database
-$servername = "localhost";
+$servername = "mysql";
 $username = "root"; // Username default XAMPP
 $password = "password"; // 
 $dbname = "pizzeria_db";

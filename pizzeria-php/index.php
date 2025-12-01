@@ -21,7 +21,7 @@ if (!isset($_SESSION['cart'])) {
 
 <section class="home" id="home">
     <div class="home-text">
-        <h1><span>Welcome</span> <br> to The world of Tasty & Fresh Pizza</h1>
+        <h1><span>Welcome</span> <br> to The Langit Pizza</h1>
         <p>Fresh, cheesy, and guaranteed to make you happy! Every bite is a perfect blend of rich flavors and premium ingredients. Whether you love classic flavors or something bold, we’ve got the perfect pizza for you. So, why wait? Choose your favorite now and enjoy every bite!</p>
         <a href="#menu" class="btn">Choose a Pizza</a>
     </div>

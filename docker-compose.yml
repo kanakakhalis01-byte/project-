@@ -1,0 +1,61 @@
+services:
+  # 1. Service Nginx (Web Server) [cite: 2809]
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80" # Akses web via localhost:8080 (Nginx)
+    volumes:
+      - ./pizzeria-php:/var/www/html # Sinkronisasi file source code
+    depends_on:
+      - php
+    networks:
+      - app-network
+
+  # 2. Service PHP-FPM (App Server) [cite: 2822]
+  php:
+    build:
+      context: ./pizzeria-php
+      dockerfile: Dockerfile
+    # Port 9000 tidak perlu di-expose ke host ("80:80"), cukup internal network
+    volumes:
+      - ./pizzeria-php:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  # 3. Service MySQL (Database) [cite: 2841]
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: pizzeria_db
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./pizzeria_db.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+  # 4. Service phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=mysql
+      - MYSQL_ROOT_PASSWORD=password
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge
