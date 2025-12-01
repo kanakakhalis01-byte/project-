@@ -1,0 +1,61 @@
+name: CI/CD Pizzeria Deployment
+
+# Trigger: Jalan setiap kali ada push ke branch master
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch: # Bisa dijalankan manual juga
+
+jobs:
+  deploy:
+    # PENTING: Sesuaikan label ini dengan label runner Anda tadi (misal: laptop-langit)
+    runs-on: [self-hosted, linux, x64]
+
+    steps:
+      # 1. Cari lokasi folder proyek di komputer secara otomatis
+      - name: Detect project path
+        run: |
+          # Mencari folder bernama 'pizzeria-project' atau 'project-' (sesuaikan nama folder Anda)
+          # Kita ambil path direktori tempat docker-compose.yml berada
+          PROJECT_PATH=$(find /home -name 'docker-compose.yml' -printf '%h\n' | head -1)
+          
+          if [ -z "$PROJECT_PATH" ]; then
+            echo "❌ Error: Folder proyek tidak ditemukan!"
+            exit 1
+          fi
+          
+          echo "PROJECT_PATH=$PROJECT_PATH" >> $GITHUB_ENV
+          echo "✅ Proyek ditemukan di: $PROJECT_PATH"
+
+      # 2. Tarik kode terbaru dari GitHub
+      - name: Pull latest changes
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: |
+          git config --global --add safe.directory ${{ env.PROJECT_PATH }}
+          git fetch origin master
+          git reset --hard origin/master
+
+      # 3. Matikan container lama (jika ada)
+      - name: Stop existing containers
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: docker compose down || true
+
+      # 4. Bersihkan image lama (Opsional, untuk hemat storage)
+      - name: Prune unused images
+        run: docker image prune -f
+
+      # 5. Build ulang dan jalankan container
+      - name: Build and Start Containers
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: docker compose up -d --build
+
+      # 6. Cek kesehatan aplikasi
+      - name: Health Check
+        run: |
+          sleep 10 # Tunggu sebentar agar container siap
+          if curl -f http://localhost:8080; then
+            echo "✅ Deployment Berhasil! Website bisa diakses."
+          else
+            echo "❌ Deployment Gagal! Website tidak merespon."
+            exit 1
+          fi
