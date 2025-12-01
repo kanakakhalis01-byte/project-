@@ -34,7 +34,7 @@ jobs:
       working-directory: ${{ env.PROJECT_PATH }}
       run: |
         git fetch origin main      # Download update terbaru
-        git reset --hard origin/main  # Reset ke versi terbaru (hapus perubahan lokal)
+        git reset --hard main  # Reset ke versi terbaru (hapus perubahan lokal)
         
     # Step 2: Stop semua container yang sedang berjalan
     - name: Stop existing containers
@@ -99,7 +99,7 @@ jobs:
       working-directory: ${{ env.PROJECT_PATH }}
       run: |
         git fetch origin main      # Download update terbaru
-        git reset --hard origin/main  # Reset ke versi terbaru (hapus perubahan lokal)
+        git reset --hard main  # Reset ke versi terbaru (hapus perubahan lokal)
         
     # Step 2: Stop semua container yang sedang berjalan
     - name: Stop existing containers
