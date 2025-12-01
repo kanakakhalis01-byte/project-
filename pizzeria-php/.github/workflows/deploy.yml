@@ -3,13 +3,13 @@ name: CI/CD Pizzeria Deployment
 # Trigger: Jalan setiap kali ada push ke branch master
 on:
   push:
-    branches: [ master ]
+    branches: [ langit ]
   workflow_dispatch: # Bisa dijalankan manual juga
 
 jobs:
   deploy:
     # PENTING: Sesuaikan label ini dengan label runner Anda tadi (misal: laptop-langit)
-    runs-on: [self-hosted, linux, x64]
+    runs-on: [laptop-langit, linux, x64]
 
     steps:
       # 1. Cari lokasi folder proyek di komputer secara otomatis
