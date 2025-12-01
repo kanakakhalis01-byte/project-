@@ -33,8 +33,8 @@ jobs:
     - name: Pull latest changes
       working-directory: ${{ env.PROJECT_PATH }}
       run: |
-        git fetch origin master      # Download update terbaru
-        git reset --hard origin/master  # Reset ke versi terbaru (hapus perubahan lokal)
+        git fetch origin main      # Download update terbaru
+        git reset --hard origin/main  # Reset ke versi terbaru (hapus perubahan lokal)
         
     # Step 2: Stop semua container yang sedang berjalan
     - name: Stop existing containers
@@ -98,8 +98,8 @@ jobs:
     - name: Pull latest changes
       working-directory: ${{ env.PROJECT_PATH }}
       run: |
-        git fetch origin master      # Download update terbaru
-        git reset --hard origin/master  # Reset ke versi terbaru (hapus perubahan lokal)
+        git fetch origin main      # Download update terbaru
+        git reset --hard origin/main  # Reset ke versi terbaru (hapus perubahan lokal)
         
     # Step 2: Stop semua container yang sedang berjalan
     - name: Stop existing containers
@@ -142,3 +142,4 @@ jobs:
         else
           echo "❌ Deployment gagal di laptop-hudya! Cek log error di atas"
         fi
+
